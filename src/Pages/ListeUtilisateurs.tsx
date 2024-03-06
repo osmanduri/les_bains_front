@@ -113,6 +113,7 @@ export default function ListeUtilisateurs() {
             </table>
           </div>
         </div>
+        {users.length === 0 && <p className='uppercase border border-black p-2'>Aucun Clients</p>}
       </section>
 
       <div className="container mx-auto p-6 font-mono flex justify-end space-x-2">

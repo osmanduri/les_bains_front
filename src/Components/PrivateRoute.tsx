@@ -9,7 +9,6 @@ const PrivateRoute = () => {
   const cookies = new Cookies();
 
   useEffect(() => {
-    
 
     async function verifyIsConnected() {
       try {

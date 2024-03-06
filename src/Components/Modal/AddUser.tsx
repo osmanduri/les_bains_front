@@ -135,18 +135,18 @@ interface msgApi {
         >
           <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Ajouter un utilisateur</h2>
           <form onSubmit={handleSubmit} className="mt-4">
-            <div className="mb-4">
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-600">
-                Prénom :
-              </label>
-              <input type="text" className="mt-1 p-2 w-full border rounded-md placeholder:text-sm" placeholder="Entrez votre prénom" onChange={(e) => setPrenom(e.target.value)} value={prenom} required/>
-            </div>
-  
-            <div className="mb-4">
+          <div className="mb-4">
               <label htmlFor="lastName" className="block text-sm font-medium text-gray-600">
                 Nom :
               </label>
               <input type="text" id="lastName" name="lastName" className="mt-1 p-2 w-full border rounded-md outline-none placeholder:text-sm" placeholder="Entrez votre nom" onChange={(e) => setNom(e.target.value)} value={nom} required/>
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="firstName" className="block text-sm font-medium text-gray-600">
+                Prénom :
+              </label>
+              <input type="text" className="mt-1 p-2 w-full border rounded-md outline-none placeholder:text-sm" placeholder="Entrez votre prénom" onChange={(e) => setPrenom(e.target.value)} value={prenom} required/>
             </div>
   
             <div className="mb-4">

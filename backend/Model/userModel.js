@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     email:{
         type:String,
         required:false,
-        unique:true,
+        unique:false,
         trim:true
     },
     date_naissance:{

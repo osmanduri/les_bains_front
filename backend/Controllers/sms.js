@@ -10,10 +10,10 @@ module.exports.send = (req, res) => {
     client.messages
     .create({
         body: req.body.msg,
-        from: '+13392204475',
-        to: '+33 6 27 02 44 24'
+        from: "LES BAINS",
+        to: '+33627024424'
     })
-    .then(message => console.log(message.sid))
+    .then(message => console.log(message))
     .catch(err => {
         console.log(err)
     })
@@ -32,49 +32,37 @@ function convertToInternationalFormat(phoneNumber) {
     }
   }
 
-module.exports.sendSmsBirthday15Days = () => {
-    cron.schedule('54 13 * * *', async () => {
-       const users = await this.filterDataBaseBirthday15Days()
+  module.exports.sendSmsBirthday15Days = () => {
+    cron.schedule('53 18 * * *', async () => {
+        console.log('Lancement de cron schedule à :', new Date());
+        const users = await this.filterDataBaseBirthday15Days();
 
-       if(users.length > 0){
-        console.log("Anniverssaire prévu dans 15 jours !!!")
-        console.log(users)
-        users.forEach(e => {
-            const internationalPhoneNumber = convertToInternationalFormat(e.telephone);
-            if(internationalPhoneNumber){
-                const messageToSend = `Bonjour ${e.prenom} !
+        if (users.length > 0) {
+            console.log("Anniversaire prévu dans 15 jours pour :", users.length, "utilisateurs.");
+            Promise.all(users.map(user => {
+                const internationalPhoneNumber = convertToInternationalFormat(user.telephone);
+                if (internationalPhoneNumber) {
+                  let messageToSend = "Bonjour " +user.prenom+", votre anniv approche et Les Bains d'Aulnay vous offrent une promo spéciale. Profitez-en!";
+                  console.log(messageToSend) 
 
-                🎉 Dans 15 jours, c'est votre jour spécial ! 🎉
-                L'équipe des bains d'aulnay souhaite que votre anniversaire soit aussi exceptionnel que vous. Nous attendons votre visite pour égayer cette journée !
-                Joyeux anniversaire en avance !
-                                
-                Bien à vous,
-                Les Bains D'Aulnay 😀`
-
-    
-                client.messages
-                    .create({
-                    body: messageToSend,
-                    from: '+13392204475',
-                    to: internationalPhoneNumber
-                    })
-                    .then(message => console.log(message.sid))
-                    .catch(err => {
-                    console.log(err)
-                    })
-            }else{
-                console.log('Probleme avec le numéro de telephone')
-            }
-            console.log(internationalPhoneNumber)
-        })
-       }else{
-        console.log("Pas d'anniverssaire de prévu dans 15 jours :(")
-       }
+                    return client.messages.create({
+                        body: messageToSend,
+                        from: "LES BAINS", // Assurez-vous que c'est le bon ID si supporté.
+                        to: internationalPhoneNumber
+                    });
+                } else {
+                    console.log('Problème avec le numéro de téléphone de', user.prenom);
+                }
+            })).then(results => console.log("Messages envoyés avec succès :", results))
+              .catch(err => console.error("Erreur lors de l'envoi des messages :", err));
+        } else {
+            console.log("Pas d'anniversaire prévu dans 15 jours.");
+        }
     }, {
         scheduled: true,
         timezone: "Europe/Paris"
-      })
-}
+    });
+};
 
 module.exports.filterDataBaseBirthday15Days = async () => {
 

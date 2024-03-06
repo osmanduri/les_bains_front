@@ -130,6 +130,7 @@ const addClient = async (req, res) => {
 
         res.status(200).send(savedUser);
     }catch(err){
+        console.log(err)
         res.status(400).send(err)
     }
 }
@@ -195,33 +196,59 @@ const deleteClientById = async (req, res) => {
 
 
 const login = async (req, res) => {
-    try{
-        const user = await adminModel.findOne({email: req.body.email})
+    try {
+        const user = await adminModel.findOne({email: req.body.email});
 
-        if(!user){
-            return res.json({ message: "Utilisateur inconnue !"})
+        if (!user) {
+            return res.json({message: "Utilisateur inconnue !"});
         }
 
-        const decryptPassword = await bcrypt.compare(req.body.password, user.password)
+        const decryptPassword = await bcrypt.compare(req.body.password, user.password);
 
-        if(!decryptPassword){
-            return res.json({message: "Mot de passe incorrect !"})
+        if (!decryptPassword) {
+            return res.json({message: "Mot de passe incorrect !"});
         }
 
-        const token = jwt.sign({
-            id: user._id,
-            isAdmin:user.isAdmin
-        },
-        process.env.JWT_SEC, {expiresIn: "1y"}
-        )
+        // Génération du token d'accès
+        const token = jwt.sign(
+            { id: user._id, isAdmin: user.isAdmin },
+            process.env.JWT_SEC,
+            { expiresIn: "1y" }
+        );
 
-        const {password, ...others} = user._doc
+        // Génération du refresh token
+        const refreshToken = jwt.sign(
+            { id: user._id, isAdmin: user.isAdmin },
+            process.env.REFRESH_TOKEN_SECRET, // Assurez-vous d'avoir cette clé secrète dans vos variables d'environnement
+            { expiresIn: "1y" } // Vous pouvez ajuster la durée selon vos besoins
+        );
 
-        res.status(200).send({...others, token})
-    }catch(err){
-        res.status(400).send(err)
+        // Stocker le refresh token dans la base de données ou dans un stockage sécurisé côté serveur
+        // Par exemple, ajouter le refresh token à l'utilisateur dans la base de données
+        // Cela dépend de votre modèle de données et de votre implémentation
+        // user.refreshToken = refreshToken;
+        // await user.save();
+
+        const cookieOptions = {
+            httpOnly: true,
+            maxAge: 3600000,
+            secure: false, // Assurez-vous que secure est false en développement
+            sameSite: 'Lax', // Ou 'None' si vous utilisez HTTPS en développement
+            path: '/',
+        };
+        
+    
+        // Définir le cookie
+        res.cookie('tokenTest', 'Bearer 123', cookieOptions);
+
+        const { password, ...others } = user._doc; // Assurez-vous que cela ne renvoie pas le refresh token ou d'autres données sensibles
+
+        // Envoyer le token et le refresh token à l'utilisateur
+        res.status(200).send({ ...others, token, refreshToken });
+    } catch (err) {
+        res.status(400).send(err);
     }
-}
+};
 
 const rechercheParNumeroDeTel = async (req, res) => {
     console.log(req.body.tel)
