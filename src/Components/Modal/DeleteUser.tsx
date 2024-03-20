@@ -39,7 +39,7 @@ export default function DeleteUser({ modalIsOpen, setIsOpen, nom, prenom, userId
         e.preventDefault()
     
         try{
-            const response = await axios.delete(`http://localhost:5001/api/users/deleteClient/${userId}`, {
+            const response = await axios.delete(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/deleteClient/${userId}`, {
               headers:{
                 token: `Bearer ${cookies.get('token')}`
             }
@@ -50,7 +50,6 @@ export default function DeleteUser({ modalIsOpen, setIsOpen, nom, prenom, userId
                 setUpdateListeClient(prev => !prev)
             }
 
-            console.log(response.data)
         }catch(err){
             console.log(err)
         }
@@ -58,7 +57,6 @@ export default function DeleteUser({ modalIsOpen, setIsOpen, nom, prenom, userId
 
     Modal.setAppElement('#root');
   
-    let subtitle: any;
   
     function afterOpenModal() {
       // references are now sync'd and can be accessed.

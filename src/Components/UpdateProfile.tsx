@@ -48,11 +48,9 @@ export default function UpdateProfile({nom, prenom, telephone, email, dateNaissa
             point_fidelite:pointFidelite
         }
 
-        console.log(payload.point_fidelite)
-
         async function updateUser(){
             try{
-                const res = await axios.put(`http://localhost:5001/api/users/updateClient/${params.id}`, payload, {
+                const res = await axios.put(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/updateClient/${params.id}`, payload, {
                     headers:{
                         token: `Bearer ${cookies.get('token')}`
                     }

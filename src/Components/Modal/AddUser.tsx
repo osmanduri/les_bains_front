@@ -88,7 +88,7 @@ interface msgApi {
         point_fidelite:pointFidelite
       }
       setTimeout(() => {
-      axios.post('http://localhost:5001/api/users/addUser', payload, {
+      axios.post(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/addUser`, payload, {
         headers:{
           token: `Bearer ${cookies.get('token')}`
       }

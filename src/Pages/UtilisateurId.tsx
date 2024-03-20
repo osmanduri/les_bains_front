@@ -22,7 +22,7 @@ export default function UtilisateurId() {
         setSuccessfulRequest(false)
         async function fetchUserId(){
             try{
-                const res = await axios.get(`http://localhost:5001/api/users/getUserById/${params.id}`,{
+                const res = await axios.get(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/getUserById/${params.id}`,{
                     headers:{
                         token: `Bearer ${cookies.get('token')}`
                     }

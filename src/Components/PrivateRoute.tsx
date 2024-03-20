@@ -9,10 +9,9 @@ const PrivateRoute = () => {
   const cookies = new Cookies();
 
   useEffect(() => {
-
     async function verifyIsConnected() {
       try {
-        const response = await axios.get('http://localhost:5001/api/users/verifyConnected/', {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/verifyConnected/`, {
           headers: {
             token: `Bearer ${cookies.get('token')}`
           }

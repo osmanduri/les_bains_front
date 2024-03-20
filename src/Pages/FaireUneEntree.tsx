@@ -37,21 +37,19 @@ export default function FaireUneEntree() {
     const [singleUser, setSingleUser] = useState<singleUserType | undefined>()
     const [startLoadingEntrance, setStartLoadingEntrance] = useState<boolean>(false)
     const [numIntrouvable, setNumIntrouvable] = useState<string>('')
-    const [responseMsg, setResponseMsg] = useState<responseMsgType>({
-        offre:"",
-        msg:"",
-        color:""
-    })
+    const [responseMsg, setResponseMsg] = useState<responseMsgType>({offre:"",msg:"",color:""})
     const handleSearchByPhoneNumber = async () => {
         setNumIntrouvable('')
         try{
-            const res = await axios.post('http://localhost:5001/api/users/searchByPhoneNumber', {tel:phoneInput}, {
+            const res = await axios.post(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/searchByPhoneNumber`, {tel:phoneInput}, {
                 headers:{
                     token: `Bearer ${cookies.get('token')}`
                 }
             })
             setListUserByPhone(res.data)
         }catch(err:any){
+            setSingleUser(undefined)
+            setListUserByPhone([]);
             setNumIntrouvable(err.response.data.message)
         }
 
@@ -62,6 +60,8 @@ export default function FaireUneEntree() {
     }
 
     const handleSetSingleUser = (element: any) => {
+        setListUserByPhone([]);
+        setResponseMsg({offre:"",msg:"",color:""})
         const input_tel = document.getElementById('input_tel') as HTMLInputElement | null;
     
         if (input_tel) {
@@ -77,6 +77,7 @@ export default function FaireUneEntree() {
 
     const handleSubmit =  (e:any) => {
         e.preventDefault()
+        console.log('lancement handlesubmit')
         setStartLoadingEntrance(true)
         setResponseMsg({
             offre:"",
@@ -86,7 +87,7 @@ export default function FaireUneEntree() {
 
         async function fetchEntrance(){
             try{
-                const res = await axios.get(`http://localhost:5001/api/users/entrance/${singleUser?._id}`, {
+                const res = await axios.get(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/entrance/${singleUser?._id}`, {
                     headers:{
                         token: `Bearer ${cookies.get('token')}`
                     }
@@ -153,7 +154,7 @@ export default function FaireUneEntree() {
                 
             }
             <div className='mt-12 flex justify-end items-center'>
-                 <button disabled={singleUser && !startLoadingEntrance ? false : true} className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+                 <button disabled={responseMsg.msg || startLoadingEntrance || !singleUser ? true : false} className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
                     <span className={singleUser ? "w-[170px] relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0":"w-[170px] relative px-5 py-2.5 transition-all ease-in duration-75 bg-[#EBEBE4] rounded-md text-black cursor-not-allowed"}>
                     { startLoadingEntrance ? <p>Entrée en cours...</p> : <p>Effectuer une entrée</p>} 
                     </span>
