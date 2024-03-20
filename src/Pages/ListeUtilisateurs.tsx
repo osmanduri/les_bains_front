@@ -57,20 +57,6 @@ export default function ListeUtilisateurs() {
     
   }
 
-  function getCookie(){
-    console.log('cookie')
-    axios.get('http://localhost:5001/api/users/cookie', {
-  withCredentials: true,
-})
-  .then(response => {
-    // Traiter la réponse réussie
-    console.log(response.data);
-  })
-  .catch(error => {
-    // Gérer les erreurs
-    console.error(error);
-  });
-  }
 
   return (
     <>
@@ -96,7 +82,7 @@ export default function ListeUtilisateurs() {
             <table className="w-full">
               <thead>
                 <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
-                  <th className="px-4 py-3 bg-black text-white border-white border-r-[1px] w-[300px] max-lg:w-[150px]" onClick={getCookie}>Client</th>
+                  <th className="px-4 py-3 bg-black text-white border-white border-r-[1px] w-[300px] max-lg:w-[150px]">Client</th>
                   <th className="px-4 py-3 bg-black text-white border-white border-r-[1px]">Points</th>
                   <th className="px-4 py-3 bg-black text-white border-white border-r-[1px]">Téléphone</th>
                   <th className="px-4 py-3 bg-black text-white ">Derniere entrée</th>

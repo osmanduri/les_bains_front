@@ -18,8 +18,6 @@ export default function PrivateRouteAdmin() {
               }
             });
     
-            console.log(response.data);
-    
             if (response.data === "isAdmin") {
                 setIsAdmin(true);
             } else if(response.data === "isNotAdmin"){

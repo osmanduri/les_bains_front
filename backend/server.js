@@ -24,7 +24,7 @@ const corsOptions = {
 
 
 app.use(cors({
-  origin: ['http://localhost:3001','http://127.0.0.1:3001'],  // Remplacez par l'URL de votre application React
+  origin: ['http://localhost:3001','http://127.0.0.1:3001', 'https://les-bains-aulnay-app.netlify.app'],  // Remplacez par l'URL de votre application React
   credentials: true,
 }));
 

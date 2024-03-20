@@ -6,8 +6,8 @@ const cron = require('node-cron')
 const userModel = require('../Model/userModel')
 const PhoneNumber = require('libphonenumber-js');
 
-module.exports.send = (req, res) => {
-    client.messages
+module.exports.send = async (req, res) => {
+    /*client.messages
     .create({
         body: req.body.msg,
         from: "LES BAINS",
@@ -16,8 +16,10 @@ module.exports.send = (req, res) => {
     .then(message => console.log(message))
     .catch(err => {
         console.log(err)
-    })
+    })*/
 
+    const users = await this.filterDataBaseBirthday15Days();
+    console.log(users)
     res.send('sms sent !')
 }
 
@@ -33,17 +35,16 @@ function convertToInternationalFormat(phoneNumber) {
   }
 
   module.exports.sendSmsBirthday15Days = () => {
-    cron.schedule('53 18 * * *', async () => {
+    cron.schedule('44 16 * * *', async () => {
         console.log('Lancement de cron schedule à :', new Date());
         const users = await this.filterDataBaseBirthday15Days();
-
+        console.log(users)
         if (users.length > 0) {
             console.log("Anniversaire prévu dans 15 jours pour :", users.length, "utilisateurs.");
             Promise.all(users.map(user => {
                 const internationalPhoneNumber = convertToInternationalFormat(user.telephone);
                 if (internationalPhoneNumber) {
                   let messageToSend = "Bonjour " +user.prenom+", votre anniv approche et Les Bains d'Aulnay vous offrent une promo spéciale. Profitez-en!";
-                  console.log(messageToSend) 
 
                     return client.messages.create({
                         body: messageToSend,

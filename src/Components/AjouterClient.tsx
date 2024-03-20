@@ -110,7 +110,7 @@ export default function AjouterClient() {
                     <label  className="mb-1 block text-base font-medium text-[#07074D]">
                         Téléphone<span className='italic text-sm'> (obligatoire)</span>
                     </label>
-                    <input value={telephone} onChange={e=> setTelephone(e.target.value)} type="text" name="phone" id="phone" placeholder="Téléphone"
+                    <input value={telephone} onChange={e=> setTelephone(e.target.value)} type="tel" name="phone" id="phone" placeholder="Téléphone"
                         className="w-full rounded-md border border-[#e0e0e0] bg-white py-2 px-4 text-base font-bold text-black outline-none focus:shadow-md" required/>
                 </div>
                 <div className="mb-5">

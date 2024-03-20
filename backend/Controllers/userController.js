@@ -1,5 +1,6 @@
 const userModel = require('../Model/userModel')
 const adminModel = require('../Model/adminModel')
+const historiqueModel = require('../Model/historiqueModel')
 const ObjectID = require('mongoose').Types.ObjectId
 const moment = require('moment')
 moment.locale('fr')
@@ -141,8 +142,6 @@ const updateClient = async (req, res) => {
     try {
         const id = req.params.id;
 
-        console.log(req.body.point_fidelite)
-
         // Utilisez uniquement les champs présents dans le corps de la requête pour la mise à jour
         const updateFields = {
             ...(req.body.nom && { nom: req.body.nom }),
@@ -153,7 +152,6 @@ const updateClient = async (req, res) => {
             ...({ point_fidelite: req.body.point_fidelite }),
         };
 
-        console.log(updateFields)
         const utilisateurMisAJour = await userModel.findOneAndUpdate(
             { _id: id },
             { $set: updateFields },
@@ -251,16 +249,24 @@ const login = async (req, res) => {
 };
 
 const rechercheParNumeroDeTel = async (req, res) => {
-    console.log(req.body.tel)
     try{
         const users = await userModel.find()
+        console.log(users)
         const filteredNumber = [];
         users.forEach(e => {
             if(e.telephone.includes(req.body.tel)){
                 filteredNumber.push(e)
             }
         })
-        res.status(200).send(filteredNumber)
+
+        if(filteredNumber.length > 0){
+            return res.status(200).send(filteredNumber)
+        }else{
+            return res.status(404).send({
+                message:"Numéro introuvable"
+            })
+        }
+        
     }catch(err){
         res.status(400).send(err)
     }
@@ -290,6 +296,21 @@ const entrance = async (req, res) => {
                 const updatedUser = await userModel.findByIdAndUpdate(req.params.id, {
                     $set: { derniere_entree: new Date(), point_fidelite: 0, entree_total: user.entree_total + 1 }
                 }, { new: true });
+                if(updatedUser){
+                    const newHistoryEnter = new historiqueModel({
+                        user_id:updatedUser._id,
+                        nom:updatedUser.nom,
+                        prenom:updatedUser.prenom,
+                        entree:updatedUser.derniere_entree,
+                        entree_formated:moment(updatedUser.derniere_entree).format('LLL'),
+                        telephone:updatedUser.telephone,
+                        email:updatedUser.email,
+                        point_fidelite:updatedUser.point_fidelite
+                    })
+                  
+                    await newHistoryEnter.save()
+
+                }
                 return res.status(200).json({ message, user: updatedUser, offre:"entree_gratuite" });
             } else if (newPointsFidelite === pointsJusOrange) {
                 // Envoyer un message pour un jus d'orange gratuit
@@ -297,12 +318,42 @@ const entrance = async (req, res) => {
                 const updatedUser = await userModel.findByIdAndUpdate(req.params.id, {
                     $set: { derniere_entree: new Date(), point_fidelite: newPointsFidelite, entree_total: user.entree_total + 1 }
                 }, { new: true });
+                if(updatedUser){
+                    const newHistoryEnter = new historiqueModel({
+                        user_id:updatedUser._id,
+                        nom:updatedUser.nom,
+                        prenom:updatedUser.prenom,
+                        entree:updatedUser.derniere_entree,
+                        entree_formated:moment(updatedUser.derniere_entree).format('LLL'),
+                        telephone:updatedUser.telephone,
+                        email:updatedUser.email,
+                        point_fidelite:updatedUser.point_fidelite
+                    })
+                  
+                    await newHistoryEnter.save()
+
+                }
                 return res.status(200).json({ message, user: updatedUser, offre:"jus_gratuite" });
             } else {
                 // Mise à jour normale sans récompense spéciale
                 const updatedUser = await userModel.findByIdAndUpdate(req.params.id, {
                     $set: { derniere_entree: new Date(), point_fidelite: newPointsFidelite, entree_total: user.entree_total + 1 }
                 }, { new: true });
+                if(updatedUser){
+                    const newHistoryEnter = new historiqueModel({
+                        user_id:updatedUser._id,
+                        nom:updatedUser.nom,
+                        prenom:updatedUser.prenom,
+                        entree:updatedUser.derniere_entree,
+                        entree_formated:moment(updatedUser.derniere_entree).format('LLL'),
+                        telephone:updatedUser.telephone,
+                        email:updatedUser.email,
+                        point_fidelite:updatedUser.point_fidelite
+                    })
+                  
+                    await newHistoryEnter.save()
+
+                }
                 return res.status(200).json({ message, user: updatedUser, offre:"pas_offre" });
             }
         } else {
@@ -364,6 +415,10 @@ const setCookies = (req, res) => {
         sameSite: 'Lax', // Ou 'None' si vous utilisez HTTPS en développement
         path: '/',
     };
+
+
+
+    
     
 
     // Définir le cookie

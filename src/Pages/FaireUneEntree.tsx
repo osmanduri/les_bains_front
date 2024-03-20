@@ -32,17 +32,18 @@ interface UserType {
 
 export default function FaireUneEntree() {
     const cookies = new Cookies();
-    const [phoneInput, setPhoneInput] = useState<number>()
+    const [phoneInput, setPhoneInput] = useState<string>()
     const [listUserByPhone, setListUserByPhone] = useState([])
     const [singleUser, setSingleUser] = useState<singleUserType | undefined>()
     const [startLoadingEntrance, setStartLoadingEntrance] = useState<boolean>(false)
+    const [numIntrouvable, setNumIntrouvable] = useState<string>('')
     const [responseMsg, setResponseMsg] = useState<responseMsgType>({
         offre:"",
         msg:"",
         color:""
     })
     const handleSearchByPhoneNumber = async () => {
-        console.log('send')
+        setNumIntrouvable('')
         try{
             const res = await axios.post('http://localhost:5001/api/users/searchByPhoneNumber', {tel:phoneInput}, {
                 headers:{
@@ -50,16 +51,14 @@ export default function FaireUneEntree() {
                 }
             })
             setListUserByPhone(res.data)
-            console.log(res.data)
-        }catch(err){
-            console.log(err)
+        }catch(err:any){
+            setNumIntrouvable(err.response.data.message)
         }
 
         if (!phoneInput) {
             setListUserByPhone([]);
             setSingleUser(undefined)
           }
-          
     }
 
     const handleSetSingleUser = (element: any) => {
@@ -93,7 +92,6 @@ export default function FaireUneEntree() {
                     }
                 })
                 if(res.status === 200){
-                    console.log(res.data.user)
                     setSingleUser(res.data.user)
                     setResponseMsg({
                         offre:res.data.offre,
@@ -123,38 +121,21 @@ export default function FaireUneEntree() {
         }, 1500)
     }
 
-    function handleClearInput() {
-        let input_tel = document.getElementById('input_tel') as HTMLInputElement | null;
-        input_tel ? input_tel.value = '' : null;
-        setListUserByPhone([]);
-        setSingleUser(undefined);
-        setStartLoadingEntrance(false);
-        setResponseMsg({
-            offre:"",
-            msg:"",
-            color:""
-        })
-    }
-
-    const handleTest = async () => {
-        console.log('test')
-
-        axios.get('http://localhost:5001/api/users/cookie').then((res) => console.log(res.data)).catch(err => console.log(err))
-    }
   return (
     <>
     <div className='max-w-[576px] mx-auto'>
     <Link to="/"><div className='mb-4 mt-4'><FaCircleArrowLeft size={40}/></div></Link>
         <form onSubmit={handleSubmit} className="w-full mb-8 overflow-hidden rounded-lg shadow-lg p-12 bg-white h-[auto]">
-            <h1 className='text-center uppercase text-2xl' onClick={handleTest}>Effectuer une entrée</h1>
+            <h1 className='text-center uppercase text-2xl'>Effectuer une entrée</h1>
             <label className="block mb-2 text-sm text-gray-900 dark:text-white mt-12 text-base font-bold">Entrez votre numéto de téléphone :</label>
             <div className="flex">
                 <span className="w-[42px] h-[42px] inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                 <Phone/>
                 </span>
                 <div className='relative w-full'>
-                <input type="text" id="input_tel" className="relative rounded-none rounded-e-lg bg-gray-50 border text-gray-900 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 outline-none" placeholder="Numeto de tel" onChange={(e) => setPhoneInput(parseInt(e.target.value))}/>
+                <input type="text" id="input_tel" className="relative rounded-none rounded-e-lg bg-gray-50 border text-gray-900 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 outline-none" placeholder="Numeto de tel" onChange={(e) => setPhoneInput(e.target.value)}/>
                 <div onClick={handleSearchByPhoneNumber} className='absolute top-3 right-5 cursor-pointer'><FaSearch size={17}/></div>
+                {numIntrouvable}
                 </div>
                 
             </div>

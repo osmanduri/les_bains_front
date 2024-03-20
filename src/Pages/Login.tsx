@@ -28,7 +28,6 @@ export default function Login() {
 
         axios.post('http://localhost:5001/api/users/login', payload)
         .then((res) => {
-            console.log(res)
             if(res.data.message === "Mot de passe incorrect !"){
                 setResponseMsg({
                     msg:res.data.message,

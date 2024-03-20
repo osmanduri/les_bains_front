@@ -18,8 +18,6 @@ const PrivateRoute = () => {
           }
         });
 
-        console.log(response.data);
-
         if (response.data === "connected!") {
           setConnected(true);
         } else {
