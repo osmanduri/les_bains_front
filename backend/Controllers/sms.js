@@ -35,10 +35,10 @@ function convertToInternationalFormat(phoneNumber) {
   }
 
   module.exports.sendSmsBirthday15Days = () => {
-    cron.schedule('44 16 * * *', async () => {
+    cron.schedule('12 18 * * *', async () => {
         console.log('Lancement de cron schedule à :', new Date());
         const users = await this.filterDataBaseBirthday15Days();
-        console.log(users)
+
         if (users.length > 0) {
             console.log("Anniversaire prévu dans 15 jours pour :", users.length, "utilisateurs.");
             Promise.all(users.map(user => {

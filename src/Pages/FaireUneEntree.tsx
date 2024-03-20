@@ -77,7 +77,7 @@ export default function FaireUneEntree() {
 
     const handleSubmit =  (e:any) => {
         e.preventDefault()
-        console.log('lancement handlesubmit')
+        console.log('Entree en cours...')
         setStartLoadingEntrance(true)
         setResponseMsg({
             offre:"",
