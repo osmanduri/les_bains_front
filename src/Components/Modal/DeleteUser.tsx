@@ -39,7 +39,7 @@ export default function DeleteUser({ modalIsOpen, setIsOpen, nom, prenom, userId
         e.preventDefault()
     
         try{
-            const response = await axios.delete(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/deleteClient/${userId}`, {
+            const response = await axios.delete(`${process.env.REACT_APP_BASE_URL_PROD}/api/users/deleteClient/${userId}`, {
               headers:{
                 token: `Bearer ${cookies.get('token')}`
             }

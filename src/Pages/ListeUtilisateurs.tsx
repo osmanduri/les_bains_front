@@ -29,7 +29,7 @@ export default function ListeUtilisateurs() {
       value: inputSearchFilter
     }
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/getAllFilter?page=${currentPage}`, payload,{
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL_PROD}/api/users/getAllFilter?page=${currentPage}`, payload,{
         headers:{
           token: `Bearer ${cookies.get('token')}`
         }
@@ -52,7 +52,7 @@ export default function ListeUtilisateurs() {
 
     // Naviguer vers la page "/login"
     setTimeout(() => {
-      window.location.href = '/login'
+      window.location.href = '/'
     }, 500)
     
   }
@@ -86,7 +86,6 @@ export default function ListeUtilisateurs() {
                   <th className="px-4 py-3 bg-black text-white border-white border-r-[1px]">Points</th>
                   <th className="px-4 py-3 bg-black text-white border-white border-r-[1px]">Téléphone</th>
                   <th className="px-4 py-3 bg-black text-white ">Derniere entrée</th>
-                  
                 </tr>
               </thead>
               <tbody className="bg-white">

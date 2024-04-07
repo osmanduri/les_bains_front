@@ -6,6 +6,7 @@ const moment = require('moment')
 moment.locale('fr')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const PhoneNumber = require('libphonenumber-js');
 
 const verifyConnected = async (req, res) => {
     res.send('connected!')
@@ -115,13 +116,22 @@ const getAllClientById = async (req, res) => {
     }
 }
 
-const addClient = async (req, res) => {
+function formatPhoneNumberCustomer(phoneNumber){
+    
+    let parsedNumber = PhoneNumber.parse(phoneNumber, 'FR'); // 'FR' pour la France, ajustez si nécessaire
+    let internationalFormat = PhoneNumber.format(parsedNumber, 'NATIONAL');
+    internationalFormat = internationalFormat.replace(/\s/g, '');
+    console.log(internationalFormat)
+    return internationalFormat
+}
 
+const addClient = async (req, res) => {
+    
     try{        
         const newUser = new userModel({
             nom: req.body.nom,
             prenom:req.body.prenom,
-            telephone:req.body.telephone,
+            telephone:formatPhoneNumberCustomer(req.body.telephone),
             email:req.body.email,
             date_naissance:req.body.date_naissance,
             point_fidelite:req.body.point_fidelite,

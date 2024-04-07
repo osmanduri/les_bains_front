@@ -35,22 +35,23 @@ function convertToInternationalFormat(phoneNumber) {
   }
 
   module.exports.sendSmsBirthday15Days = () => {
-    cron.schedule('12 18 * * *', async () => {
+    cron.schedule('34 14 * * *', async () => {
         console.log('Lancement de cron schedule à :', new Date());
         const users = await this.filterDataBaseBirthday15Days();
-
+        console.log(users)
         if (users.length > 0) {
             console.log("Anniversaire prévu dans 15 jours pour :", users.length, "utilisateurs.");
             Promise.all(users.map(user => {
                 const internationalPhoneNumber = convertToInternationalFormat(user.telephone);
                 if (internationalPhoneNumber) {
                   let messageToSend = "Bonjour " +user.prenom+", votre anniv approche et Les Bains d'Aulnay vous offrent une promo spéciale. Profitez-en!";
+                  console.log(messageToSend) 
 
-                    return client.messages.create({
+                    /*return client.messages.create({
                         body: messageToSend,
                         from: "LES BAINS", // Assurez-vous que c'est le bon ID si supporté.
                         to: internationalPhoneNumber
-                    });
+                    });*/
                 } else {
                     console.log('Problème avec le numéro de téléphone de', user.prenom);
                 }

@@ -41,7 +41,7 @@ export default function FaireUneEntree() {
     const handleSearchByPhoneNumber = async () => {
         setNumIntrouvable('')
         try{
-            const res = await axios.post(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/searchByPhoneNumber`, {tel:phoneInput}, {
+            const res = await axios.post(`${process.env.REACT_APP_BASE_URL_PROD}/api/users/searchByPhoneNumber`, {tel:phoneInput}, {
                 headers:{
                     token: `Bearer ${cookies.get('token')}`
                 }
@@ -65,7 +65,8 @@ export default function FaireUneEntree() {
         const input_tel = document.getElementById('input_tel') as HTMLInputElement | null;
     
         if (input_tel) {
-            input_tel.value = element.prenom + ' ' + element.nom;
+            
+            input_tel.value = element.telephone;
             setSingleUser(element);
             setListUserByPhone([]);
         } else {
@@ -87,7 +88,7 @@ export default function FaireUneEntree() {
 
         async function fetchEntrance(){
             try{
-                const res = await axios.get(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/entrance/${singleUser?._id}`, {
+                const res = await axios.get(`${process.env.REACT_APP_BASE_URL_PROD}/api/users/entrance/${singleUser?._id}`, {
                     headers:{
                         token: `Bearer ${cookies.get('token')}`
                     }
@@ -122,6 +123,9 @@ export default function FaireUneEntree() {
         }, 1500)
     }
 
+    const changePhoneNumber = (e:any) => {
+        setPhoneInput(e.target.value.toString())
+   }
   return (
     <>
     <div className='max-w-[576px] mx-auto'>
@@ -134,7 +138,7 @@ export default function FaireUneEntree() {
                 <Phone/>
                 </span>
                 <div className='relative w-full'>
-                <input type="text" id="input_tel" className="relative rounded-none rounded-e-lg bg-gray-50 border text-gray-900 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 outline-none" placeholder="Numeto de tel" onChange={(e) => setPhoneInput(e.target.value)}/>
+                <input type="number" id="input_tel" className="relative rounded-none rounded-e-lg bg-gray-50 border text-gray-900 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 outline-none" placeholder="Numeto de tel" onChange={changePhoneNumber}/>
                 <div onClick={handleSearchByPhoneNumber} className='absolute top-3 right-5 cursor-pointer'><FaSearch size={17}/></div>
                 {numIntrouvable}
                 </div>

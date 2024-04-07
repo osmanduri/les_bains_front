@@ -50,7 +50,7 @@ export default function UpdateProfile({nom, prenom, telephone, email, dateNaissa
 
         async function updateUser(){
             try{
-                const res = await axios.put(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/updateClient/${params.id}`, payload, {
+                const res = await axios.put(`${process.env.REACT_APP_BASE_URL_PROD}/api/users/updateClient/${params.id}`, payload, {
                     headers:{
                         token: `Bearer ${cookies.get('token')}`
                     }

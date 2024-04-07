@@ -11,7 +11,7 @@ const PrivateRoute = () => {
   useEffect(() => {
     async function verifyIsConnected() {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/verifyConnected/`, {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL_PROD}/api/users/verifyConnected/`, {
           headers: {
             token: `Bearer ${cookies.get('token')}`
           }

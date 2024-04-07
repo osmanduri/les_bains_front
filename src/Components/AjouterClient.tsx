@@ -18,7 +18,6 @@ export default function AjouterClient() {
     const [email, setEmail] = useState<string>('')
     const [dateNaissance, setDateNaissance] = useState<string>('')
     const [telephone, setTelephone] = useState<string>('')
-    const [pointFidelite, setPointFidelite] = useState<number>(0)
     const [startLoading, setStartLoading] = useState<boolean>(false)
 
     const [msgResponse, setMsgResponse] = useState<msgApi>({
@@ -32,7 +31,6 @@ export default function AjouterClient() {
         setTelephone('')
         setEmail('')
         setDateNaissance('')
-        setPointFidelite(0)
       }
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -47,10 +45,10 @@ export default function AjouterClient() {
           prenom,
           date_naissance:dateNaissance,
           telephone,
-          point_fidelite:pointFidelite
+          point_fidelite:10
         }
         setTimeout(() => {
-        axios.post(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/addUser`, payload, {
+        axios.post(`${process.env.REACT_APP_BASE_URL_PROD}/api/users/addUser`, payload, {
           headers:{
             token: `Bearer ${cookies.get('token')}`
         }

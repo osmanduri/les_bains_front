@@ -13,7 +13,7 @@ export default function Menu() {
   
 
       try{
-        const res = await axios.get(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/verifyIdentify`, {
+        const res = await axios.get(`${process.env.REACT_APP_BASE_URL_PROD}/api/users/verifyIdentify`, {
           headers:{
             token: `Bearer ${cookies.get('token')}`
           }

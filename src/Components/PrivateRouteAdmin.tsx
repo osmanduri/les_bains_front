@@ -12,7 +12,7 @@ export default function PrivateRouteAdmin() {
 
         async function verifyIsAdmin() {
           try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL_LOCALHOST}/api/users/verifyIdentify`, {
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL_PROD}/api/users/verifyIdentify`, {
               headers: {
                 token: `Bearer ${cookies.get('token')}`
               }
